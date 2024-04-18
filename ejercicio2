@@ -1,0 +1,145 @@
+/*
+EJERCICIO MODELO DE EXAMEN N° 2:
+Desarrollar un pipeline que realice calculos matematicos a partir de datos almacenados en un archivo, informe los resultados por consola
+y guarde los resultados en otro archivo. 
+Los calculos que se deben hacer son los aritmeticos tradicionales:
+- Suma
+- Resta
+- Multiplicacion
+- Division 
+ -> En el caso de la division validar que ninguno de los dos numeros sea 0 (cero)
+*/
+pipeline
+{
+    agent any
+    stages
+    {
+        stage("ficheronum1")
+        {
+            steps
+            {
+                script
+				{
+					info = "23"
+                    writeFile(file: "num1.txt", text: info)
+                    num1 = readFile(file: 'num1.txt')
+                    println "El num1 es: " + num1
+				}
+            }
+        }
+        stage("ficheronum2")
+        {
+            steps
+            {
+                script
+				{
+					info = "21"
+                    writeFile(file: "num2.txt", text: info)
+                    num2 = readFile(file: 'num2.txt')
+                    println "El num2 es: " + num2
+				}
+            }
+        }
+        stage("suma")
+        {
+            steps
+            {
+                script
+                {
+                    num1 = readFile(file: 'num1.txt').toInteger()
+                    num2 = readFile(file: 'num2.txt').toInteger()
+                    echo "num1 es: " + num1
+                    echo "num2 es: " + num2
+                    suma = num1 + num2
+                    info = "la suma es: " + suma
+                    echo info
+                    writeFile(file: "suma.txt", text: info)
+                    echo readFile(file: 'suma.txt')
+                    
+                    
+                }
+            }
+        }
+        stage("resta")
+        {
+            steps
+            {
+                script
+                {
+                    num1 = readFile(file: 'num1.txt').toInteger()
+                    num2 = readFile(file: 'num2.txt').toInteger()
+                    echo "num1 es: " + num1
+                    echo "num2 es: " + num2
+                    resta = num1 - num2
+                    info = "la resta es: " + resta
+                    echo info
+                    writeFile(file: "resta.txt", text: info)
+                    echo readFile(file: 'resta.txt')
+                    
+                }
+            }
+        }
+        stage("multiplicacion")
+        {
+            steps
+            {
+                script
+                {
+                    num1 = readFile(file: 'num1.txt').toInteger()
+                    num2 = readFile(file: 'num2.txt').toInteger()
+                    echo "num1 es: " + num1
+                    echo "num2 es: " + num2
+                    multiplicacion = num1 * num2
+                    info = "la multiplicacion es: " + multiplicacion
+                    echo info
+                    writeFile(file: "multiplicacion.txt", text: info)
+                    echo readFile(file: 'multiplicacion.txt')
+                    
+                }
+            }
+        }
+        stage("division")
+        {
+            steps
+            {
+                script
+                {
+                    num1 = readFile(file: 'num1.txt').toInteger()
+                    num2 = readFile(file: 'num2.txt').toInteger()
+                    echo "num1 es: " + num1
+                    echo "num2 es: " + num2
+                    if (num2 > 0)
+                    {
+                        division = num1 / num2
+                    }
+                    else
+                    {
+                        division = "No se puede dividir por zero"
+                    }
+                    info = "la division es: " + division
+                    writeFile(file: "division.txt", text: info)
+                    echo readFile(file: 'division.txt')
+                    
+                }
+            }
+        }
+        stage("resultado")
+        {
+            steps
+            {
+                script
+                {
+                    suma = readFile(file: 'suma.txt')
+                    resta = readFile(file: 'resta.txt')
+                    multiplicacion = readFile(file: 'multiplicacion.txt')
+                    division = readFile(file: 'division.txt')
+                    
+                    info = "Los num1 son: " + num1 +"\n " + "Los num2 son: " + num2 +"\n " +"La suma es: " + suma + "\n" + "La resta es: " + resta + "\n" + "La multiplicacion es: " + multiplicacion + "\n" + "La division es: " + division
+                    writeFile(file: "resultado.txt", text: info)
+                    echo readFile(file: 'resultado.txt')
+                    
+                }
+            }
+        }
+    }
+}
