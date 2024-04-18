@@ -1,0 +1,42 @@
+/*
+EJERCICIO MODELO DE EXAMEN N° 3:
+Generar un pipeline que informe 10 numeros consecutivos, y por cada numero consecutivo informar el cuadradado de dicho numero en un 
+txt de salida con el formato "salida_FechaDeHoy"
+2 = 4 
+3 = 9
+4 = 16
+5 = 25
+6 = 36
+7 = 49
+8 = 64
+ENTREGABLE: Codigo del proyecto
+*/
+import java.text.SimpleDateFormat
+pipeline
+{
+    agent any
+    stages
+    {
+        stage("lista numeros")
+        {
+            steps
+            {
+                script
+				{
+				    info = ""
+                    fecha = new SimpleDateFormat("dd_MM_yyyy_HH_mm_ss").format(new Date())
+					for (i in 1..10)
+					{
+					    info += "Num: " + i + " tiene el cuadrado de: " + (i*i) + "\n"
+					}
+					echo info
+					fichero = "salida_" + fecha + ".txt"
+					writeFile(file: fichero, text: info)
+					echo readFile(file: fichero)
+					sh "ls -larth | grep -i 'salida_'"
+					
+				}
+            }
+        }
+    }
+}
