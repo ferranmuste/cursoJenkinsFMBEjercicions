@@ -1,0 +1,73 @@
+/*
+EJERCICIO MODELO DE EXAMEN N°4:
+Desarrollar un Pipeline Declarativo en Jenkins que informe a traves de distintos Stages
+lo siguiente:
+- El pipeline debe tener un mensaje de bienvenida mostrando la fecha actual en formato YYYY-MM-dd
+- Información relevante sobre tu ciudad actual:
+  ~ Clima actual
+  ~ Población actual
+- En base a la población actual se debe calcular la población neta e informarla:
+  población neta = poblacion actual * 0.8
+Se debe declarar las variables de manera global. 
+Una vez generado todo esto, se debe generar un fichero de salida con la información.
+*/
+import java.text.SimpleDateFormat
+def dia = new Date()
+def fecha = new SimpleDateFormat("YYYY-MM-dd").format(dia)
+def clima = "El clima es nublado\n"
+def poblacion = 3000000
+def poblaciontxt = "La poblacion actual es: " + poblacion + "\n"
+def poblacionneta = poblacion * 0.8
+def poblacionnetatxt = "La poblacion neta es: " + poblacionneta + "\n"
+pipeline
+{
+    agent any
+    stages
+    {
+        stage("welcome")
+        {
+            steps
+            {
+                script
+				{
+					echo "bienvenido la fecha es: " + fecha
+				}
+            }
+        }
+        stage("info")
+        {
+            steps
+            {
+                script
+                {
+                    echo clima
+                    echo poblaciontxt
+                }
+            }
+        }
+        stage("poblacion")
+        {
+            steps
+            {
+                script
+                {
+                    echo poblaciontxt
+                    echo poblacionnetatxt
+                    
+                }
+            }
+        }
+        stage("fichero")
+        {
+            steps
+            {
+                script
+                {
+                    writeFile(file: "info.txt", text: clima + poblaciontxt + poblacionnetatxt)
+                    echo readFile(file: "info.txt")
+                    sh 'ls -larth | grep -i info'
+                }
+            }
+        }
+    }
+}
