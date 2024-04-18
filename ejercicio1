@@ -1,0 +1,144 @@
+/*
+EJERCICIO MODELO DE EXAMEN N° 1:
+Desarrolle un pipeline que informe lo siguiente en base a los días de la semana
+Si el día es lunes informe los siguientes calculos matemáticos de 2 numeros: Suma, Resta, Multiplicación, Division
+Si el día es Martes informe el usuario que realizo la ejecución con la fecha actual 
+Si el día es Miércoles generar un mensaje por consola que informe que se ejecuto el pipeline
+Si el día es jueves informar el clima actual en su ciudad (prestablecido en el código)
+Si el día es Viernes generar un Jenkinsfile a traves de Groovy que tenga el siguiente mensaje de consola "Lo estas haciendo de maravilas!"
+*/
+import java.text.SimpleDateFormat
+def num1 = 17
+def num2 = 13
+def dia = new Date().getDay()
+def semana = [1: "lunes", 2: "martes", 3: "miercoles", 4: "jueves", 5: "viernes", 6: "sabado", 7: "domingo"]
+def clima = "nublado"
+pipeline
+{
+    agent any
+    stages
+    {
+        stage("calculo")
+        {
+            steps
+            {
+                script
+                {
+                    //dia = 1
+                    if (semana[1] == semana[dia])
+                    {
+                        echo "es: " + semana[1]
+                        echo "A continuacion calculo"
+                        echo "num1 es: " + num1
+                        echo "num2 es: " + num2
+                        suma = num1 + num2
+                        resta = num1 - num2
+                        if (num2 == 0 ){
+                            echo "No se puede dividir por 0"
+                            division = 0
+                        }
+                        else
+                        {
+                            division = num1 / num2
+                        }
+                        mulitplicacion = num1 * num2
+                        info = "La suma es: " + suma + "\n" + "La resta es: " + resta + "\n" + "La division es: " + division + "\n" + "La multiplicacion es: " + mulitplicacion + "\n"
+                        writeFile(file: "informe_calculo.txt", text: info)
+                        println readFile(file: 'informe_calculo.txt')
+                    }
+                }
+            }
+        }
+        stage("fechaactual")
+        {
+            steps
+            {
+                script
+                {
+                    //dia = 2
+                    if (semana[2] == semana[dia])
+                    {
+                        echo "es: " + semana[2]
+                        formato = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+                        fecha = formato.format(new Date())
+                        info = "La fecha es: " + fecha
+                        writeFile(file: "informe_fechaactual.txt", text: info)
+                        println readFile(file: 'informe_fechaactual.txt')
+                    } 
+                }
+            }
+        }
+        stage("validar ejecucion")
+        {
+            steps
+            {
+                script
+                {
+                    //dia = 3
+                    if (semana[3] == semana[dia])
+                    {
+                        echo "es: " + semana[3]
+                        info = "Se ha ejecutado ${env.JOB_NAME}"  
+                        echo info
+                        writeFile(file: "informe_validar.txt", text: info)
+                        println readFile(file: 'informe_validar.txt')
+                        
+                    } 
+                }
+            }
+        }
+        stage("clima")
+        {
+            steps
+            {
+                script
+                {
+                    //dia = 4
+                    if (semana[4] == semana[dia])
+                    {
+                        echo "es: " + semana[4]
+                        info = "El clima es: " + clima  
+                        echo info
+                        writeFile(file: "informe_clima.txt", text: info)
+                        println readFile(file: 'informe_clima.txt')
+                        
+                    } 
+                }
+            }
+        }
+        stage("jenkinsfile")
+        {
+            steps
+            {
+                script
+                {
+                    //dia = 5
+                    if (semana[5] == semana[dia])
+                    {
+                        echo "es: " + semana[5]
+                        info = "pipeline\n{\nagent any\nstages\n{\nstage(\"leer\")\n{\nsteps\n{\nscript\n{\necho \"Lo estas haciendo de maravilas!\"}\n}\n}\n}\n}"
+                        writeFile(file: "informe_jenkinsfile.txt", text: info)
+                        println readFile(file: 'informe_jenkinsfile.txt')
+                        
+                    } 
+                }
+            }
+        }
+        stage("fin de semana")
+        {
+            steps
+            {
+                script
+                {
+                    //dia = 6
+                    if (dia > 5)
+                    {
+                        echo "es: " + semana[dia]
+                        info = "Es fin de semana "
+                        
+                    } 
+                }
+            }
+        }
+    }
+}
